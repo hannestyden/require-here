@@ -16,3 +16,23 @@ module RequireHere
     end
   end
 end
+
+describe 'require_here' do
+  it 'should require the constants into the current namespace' do
+    module M
+      require_here './spec/support/lib_a'
+    end
+
+    defined?(M::A).must_equal 'constant'
+  end
+
+  it 'should not require the constants into the global namespace' do
+    module M
+      require_here './spec/support/lib_a'
+    end
+
+    lambda do
+      A
+    end.must_raise NameError
+  end
+end

@@ -2,6 +2,8 @@
 
 Require constants into current namespace
 
+[![Build Status](https://secure.travis-ci.org/hannestyden/require-here.png)](http://travis-ci.org/hannestyden/require-here)
+
 # Example
 
 ```ruby

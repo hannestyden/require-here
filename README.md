@@ -1,43 +1,49 @@
 # require-here
 
-Require constants into current namespace
+Keep your namespaces clean. Require constants into current namespace
 
 [![Build Status](https://secure.travis-ci.org/hannestyden/require-here.png)](http://travis-ci.org/hannestyden/require-here)
 
 # Example
 
 ```ruby
-# lib_a.rb
+# File: a.rb
 
 module GenericModuleName
   def self.method
-    :lib_a
+    :a
   end
 end
 
-# lib_b.rb
+# File: b.rb
 
 module GenericModuleName
   def self.method
-    :lib_b
+    :b
   end
 end
 
-# app.rb
+# File: space.rb
 
-module Application
-  module CertainAspect
-    require_here 'lib_a.rb'
+require 'require_here'
+
+module Space
+  module OnePlace
+    require_here './a'
   end
 
-  module AnotherCertainAspect
-    require_here 'lib_b.rb'
+  module AnotherPlace
+    require_here './b'
   end
 end
 
-# The modules are not included, nor reopened, into the global namespace.
-Application::CertainAspect::GenericModuleName.method        # => :lib_a
-Application::AnotherCertainAspect::GenericModuleName.method # => :lib_b
+# The modules are not included into the global namespace.
+GenericModuleName rescue $!
+# => #<NameError: uninitialized constant Object::GenericModuleName>
 
-GenericModuleName rescue $! # => #<NameError: uninitialized constant Object::GenericModuleName>
+# Also they are not reopened.
+Space::OnePlace::GenericModuleName.method
+# => :a
+Space::AnotherPlace::GenericModuleName.method
+# => :b
 ```
